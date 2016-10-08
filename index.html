@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Code Mirror Sample</title>
+    <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
+    <style media="screen">
+      .CodeMirror{
+        height: 400px;
+      }
+    </style>
+    <script src="node_modules/codemirror/lib/codemirror.js" charset="utf-8"></script>
+    <script src="node_modules/codemirror/mode/sparql/sparql.js" charset="utf-8"></script>
+</head>
+
+<body>
+    <textarea id="code" name="code">
+PREFIX a: &lt;http://www.w3.org/2000/10/annotation-ns#>
+PREFIX dc: &lt;http://purl.org/dc/elements/1.1/>
+PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#>
+
+# Comment!
+
+SELECT ?given ?family
+WHERE {
+  {
+    ?annot a:annotates &lt;http://www.w3.org/TR/rdf-sparql-query/> .
+    ?annot dc:creator ?c .
+    OPTIONAL {?c foaf:givenName ?given ;
+                 foaf:familyName ?family }
+  } UNION {
+    ?c !foaf:knows/foaf:knows? ?thing.
+    ?thing rdfs
+  } MINUS {
+    ?thing rdfs:label "剛柔流"@jp
+  }
+  FILTER isBlank(?c)
+}
+    </textarea>
+
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            mode: "application/sparql-query",
+            readOnly: true
+        });
+    </script>
+
+</body>
+
+</html>
